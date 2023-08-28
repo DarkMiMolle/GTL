@@ -119,3 +119,7 @@ func (s *SortedWithFunction[T, F]) Slice(slicer *Slicer) Slice[T] {
 		slicer: *slicer,
 	}
 }
+
+func (s *SortedWithFunction[T, F]) ComparisonFunction() F {
+	return s.comparisonFunction
+}
