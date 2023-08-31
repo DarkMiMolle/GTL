@@ -3,6 +3,7 @@ package array
 import (
 	"fmt"
 	"reflect"
+	"sort"
 )
 
 // TODO: test
@@ -81,16 +82,16 @@ func (s *Sorted[T]) InsertMany(elem ...T) (allIdx []int) {
 func (s Sorted[T]) String() string {
 	return fmt.Sprint(s.array)
 }
-func (s *Sorted[T]) At(i int) T {
+func (s Sorted[T]) At(i int) T {
 	return s.array[i]
 }
 func (s *Sorted[T]) RefAt(i int) *T {
 	return &s.array[i]
 }
-func (s *Sorted[T]) Len() int {
+func (s Sorted[T]) Len() int {
 	return len(s.array)
 }
-func (s *Sorted[T]) Iterate(forEach func(i int, elem T)) {
+func (s Sorted[T]) Iterate(forEach func(i int, elem T)) {
 	for i, elem := range s.array {
 		forEach(i, elem)
 	}
@@ -110,11 +111,19 @@ func (s Sorted[T]) UnderlyingArray() []T {
 	copy(arr, s.array)
 	return arr
 }
-func (s *Sorted[T]) First() T {
+func (s Sorted[T]) First() T {
 	return s.At(0)
 }
-func (s *Sorted[T]) Last() T {
+func (s Sorted[T]) Last() T {
 	return s.At(s.Len() - 1)
+}
+func (s *Sorted[T]) Copy() Sorted[T] {
+	c := Sorted[T]{
+		comparisonFunction: s.comparisonFunction,
+		array:              make([]T, len(s.array)),
+	}
+	copy(c.array, s.array)
+	return c
 }
 
 func (s Sorted[T]) Find(elem T) (idx int, found bool) {
@@ -186,4 +195,14 @@ func (s Sorted[T]) SplitWhen(cond func(elem T) bool) (left, right Sorted[T]) {
 	}
 	left.array = s.UnderlyingArray()
 	return
+}
+
+func SortedFromList[T any](arr []T, comparison ElemComparisonFunction[T]) Sorted[T] {
+	sort.Slice(arr, func(l, r int) bool {
+		return comparison(arr[l], arr[r]) == After
+	})
+	return Sorted[T]{
+		comparisonFunction: comparison,
+		array:              arr,
+	}
 }
