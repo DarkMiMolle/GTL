@@ -1,6 +1,11 @@
 package utils
 
-import "reflect"
+import (
+	"encoding/json"
+	"reflect"
+
+	"go.mongodb.org/mongo-driver/bson"
+)
 
 // TODO: test
 
@@ -58,4 +63,30 @@ func (opt *Opt[T]) EqOpt(val Opt[T]) bool {
 			--> if they are the same value it will be true, and false otherwise
 	*/
 	return opt.Eq(val.ValueOr(zero)) == val.Eq(opt.ValueOr(zero))
+}
+
+func (opt *Opt[T]) MarshalJSON() ([]byte, error) {
+	return json.Marshal(opt.value)
+}
+func (opt *Opt[T]) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &opt.value)
+}
+
+func (opt *Opt[T]) MarshalBSON() ([]byte, error) {
+	_, data, err := bson.MarshalValue(opt.value)
+	return data, err
+}
+func (opt *Opt[T]) UnmarshalBSON(data []byte) error {
+	return bson.Unmarshal(data, &opt.value)
+}
+
+func NewOpt[T any](value ...T) *Opt[T] {
+	if len(value) == 0 {
+		return &Opt[T]{}
+	}
+	if len(value) == 1 {
+		value := value[0]
+		return &Opt[T]{&value}
+	}
+	panic("NewOpt should be call with only 0 or 1 element")
 }
