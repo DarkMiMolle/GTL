@@ -7,8 +7,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// TODO: test
-
 type Opt[T any] struct {
 	value *T
 }
@@ -80,13 +78,13 @@ func (opt *Opt[T]) UnmarshalBSON(data []byte) error {
 	return bson.Unmarshal(data, &opt.value)
 }
 
-func NewOpt[T any](value ...T) *Opt[T] {
+func NewOpt[T any](value ...T) Opt[T] {
 	if len(value) == 0 {
-		return &Opt[T]{}
+		return Opt[T]{}
 	}
 	if len(value) == 1 {
 		value := value[0]
-		return &Opt[T]{&value}
+		return Opt[T]{&value}
 	}
 	panic("NewOpt should be call with only 0 or 1 element")
 }
