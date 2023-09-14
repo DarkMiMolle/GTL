@@ -63,3 +63,6 @@ func (opt Value[T]) EqOpt(val Value[T]) bool {
 func Some[T any](val T) Value[T] {
 	return Value[T]{&val}
 }
+func Missing[T any]() Value[T] {
+	return Value[T]{}
+}
