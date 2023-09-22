@@ -7,14 +7,14 @@ import (
 	"go.mongodb.org/mongo-driver/bson/bsontype"
 )
 
-func (opt *Value[T]) MarshalJSON() ([]byte, error) {
+func (opt Value[T]) MarshalJSON() ([]byte, error) {
 	return json.Marshal(opt.value)
 }
 func (opt *Value[T]) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &opt.value)
 }
 
-func (opt *Value[T]) MarshalBSONValue() (bsontype.Type, []byte, error) {
+func (opt Value[T]) MarshalBSONValue() (bsontype.Type, []byte, error) {
 	if opt.value == nil {
 		return bson.TypeNull, nil, nil
 	}

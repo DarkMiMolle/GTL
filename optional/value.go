@@ -66,3 +66,6 @@ func Some[T any](val T) Value[T] {
 func Missing[T any]() Value[T] {
 	return Value[T]{}
 }
+func Nil[T any]() Value[T] {
+	return Missing[T]()
+}
