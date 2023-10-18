@@ -1,6 +1,7 @@
 package optional
 
 import (
+	"fmt"
 	"reflect"
 )
 
@@ -58,6 +59,12 @@ func (opt Value[T]) EqOpt(val Value[T]) bool {
 			--> if they are the same value it will be true, and false otherwise
 	*/
 	return opt.Eq(val.ValueOr(zero)) == val.Eq(opt.ValueOr(zero))
+}
+func (opt Value[T]) String() string {
+	if opt.value == nil {
+		return fmt.Sprintf("%v(null)", reflect.TypeOf(opt.value).Elem())
+	}
+	return fmt.Sprintf("%v", *opt.value)
 }
 
 func Some[T any](val T) Value[T] {
