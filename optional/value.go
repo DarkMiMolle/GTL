@@ -76,3 +76,13 @@ func Missing[T any]() Value[T] {
 func Nil[T any]() Value[T] {
 	return Missing[T]()
 }
+
+func Copy[T any](opt Value[T]) Value[T] {
+	if opt.value == nil {
+		return opt
+	}
+	cpy := *opt.value
+	return Value[T]{
+		value: &cpy,
+	}
+}
