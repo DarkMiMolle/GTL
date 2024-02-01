@@ -60,3 +60,40 @@ func Filter[T any](arr []T, filter func(elem T) bool) []T {
 	}
 	return filtered
 }
+
+func FindElemRef[T comparable](arr []T, elem T) (*T, bool) {
+	for i := range arr {
+		ref := &arr[i]
+		if *ref == elem {
+			return ref, true
+		}
+	}
+	return nil, false
+}
+
+func FindElem[T comparable](arr []T, elem T) (int, bool) {
+	for i, val := range arr {
+		if val == elem {
+			return i, true
+		}
+	}
+	return 0, false
+}
+
+func FindMatchRef[T any](arr []T, match func(T) bool) (*T, bool) {
+	for i, val := range arr {
+		if match(val) {
+			return &arr[i], true
+		}
+	}
+	return nil, false
+}
+
+func FindMatch[T any](arr []T, match func(T) bool) (int, bool) {
+	for i, val := range arr {
+		if match(val) {
+			return i, true
+		}
+	}
+	return 0, false
+}
