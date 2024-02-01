@@ -97,3 +97,15 @@ func FindMatch[T any](arr []T, match func(T) bool) (int, bool) {
 	}
 	return 0, false
 }
+
+func ReduceAs[T1, T2 any](arr []T1, reduce func(reduced T2, elem T1) T2) T2 {
+	var result T2
+	for _, elem := range arr {
+		result = reduce(result, elem)
+	}
+	return result
+}
+
+func Reduce[T any](arr []T, reduce func(reduced, elem T) T) T {
+	return ReduceAs(arr, reduce)
+}
