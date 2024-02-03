@@ -1,45 +1,29 @@
 package operator
 
-import "reflect"
+import (
+	"github.com/DarkMiMolle/GTL/types"
+	"reflect"
+)
 
-type integerType interface {
-	~int | ~int8 | ~int16 | ~int32 | ~int64 |
-		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64
-}
-
-type floatType interface {
-	~float32 | ~float64
-}
-
-type complexType interface {
-	~complex64 | ~complex128
-}
-
-type numberTypes interface {
-	integerType | floatType | complexType
-}
-
-type textTypes interface {
-	~string | ~rune
-}
-
-func BuiltinPlus[T interface{ numberTypes | textTypes }](left, right T) T {
+func BuiltinPlus[T interface {
+	types.NumberTypes | types.TextTypes
+}](left, right T) T {
 	return left + right
 }
 
-func BuiltinMinus[T interface{ numberTypes }](left, right T) T {
+func BuiltinMinus[T interface{ types.NumberTypes }](left, right T) T {
 	return left - right
 }
 
-func BuiltinMult[T interface{ numberTypes }](left, right T) T {
+func BuiltinMult[T interface{ types.NumberTypes }](left, right T) T {
 	return left * right
 }
 
-func BuiltinDiv[T interface{ numberTypes }](left, right T) T {
+func BuiltinDiv[T interface{ types.NumberTypes }](left, right T) T {
 	return left / right
 }
 
-func BuiltinMod[T interface{ integerType }](left, right T) T {
+func BuiltinMod[T interface{ types.IntegerTypes }](left, right T) T {
 	return left % right
 }
 
