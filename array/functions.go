@@ -131,3 +131,31 @@ func All[T any](arr []T, check func(elem T) bool) bool {
 	}
 	return true
 }
+
+// Compare two array with operator == on their element
+// array of different size are not equal
+func Compare[T comparable](arr1, arr2 []T) bool {
+	if len(arr1) != len(arr2) {
+		return false
+	}
+	for idx, elem := range arr1 {
+		if elem != arr2[idx] {
+			return false
+		}
+	}
+	return true
+}
+
+// Compare two array with cmp function on their element
+// array of different size are not equal
+func CompareWith[T any](arr1, arr2 []T, cmp func(elem1, elem2 T) bool) bool {
+	if len(arr1) != len(arr2) {
+		return false
+	}
+	for idx, elem1 := range arr1 {
+		if !cmp(elem1, arr2[idx]) {
+			return false
+		}
+	}
+	return true
+}
