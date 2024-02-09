@@ -61,6 +61,8 @@ func Filter[T any](arr []T, filter func(elem T) bool) []T {
 	return filtered
 }
 
+// FindElemRef will return a reference to the first element from 'arr' equal to 'elem' (using '==') along with a boolean that indicate if the element is found
+// if the element is not found the boolean is false and the pointer is nil
 func FindElemRef[T comparable](arr []T, elem T) (*T, bool) {
 	for i := range arr {
 		ref := &arr[i]
@@ -71,6 +73,9 @@ func FindElemRef[T comparable](arr []T, elem T) (*T, bool) {
 	return nil, false
 }
 
+// FindElem will return the index to the first element from 'arr' where 'arr[i] == elem' (with 'i' the index)
+// it also returns a boolean set to true if the element is found and false otherwise
+// If the element is not found the index is set to 0
 func FindElem[T comparable](arr []T, elem T) (int, bool) {
 	for i, val := range arr {
 		if val == elem {
@@ -80,6 +85,9 @@ func FindElem[T comparable](arr []T, elem T) (int, bool) {
 	return 0, false
 }
 
+// FindMatchRef will return the reference of the first element from 'arr' where 'match' is true
+// it also returns a boolean that indicate wether the element is found or not
+// if the element is not found, the pointer is nil
 func FindMatchRef[T any](arr []T, match func(T) bool) (*T, bool) {
 	for i, val := range arr {
 		if match(val) {
@@ -89,6 +97,8 @@ func FindMatchRef[T any](arr []T, match func(T) bool) (*T, bool) {
 	return nil, false
 }
 
+// FindMatch do the same thing than FindMatchRef except it return the index instead of a reference
+// it return 0 if the element is not found
 func FindMatch[T any](arr []T, match func(T) bool) (int, bool) {
 	for i, val := range arr {
 		if match(val) {
@@ -98,6 +108,7 @@ func FindMatch[T any](arr []T, match func(T) bool) (int, bool) {
 	return 0, false
 }
 
+// ReduceAs reduce the array 'arr' with the function reduce with possible different result type
 func ReduceAs[T1, T2 any](arr []T1, reduce func(reduced T2, elem T1) T2) T2 {
 	var result T2
 	for _, elem := range arr {
@@ -106,6 +117,17 @@ func ReduceAs[T1, T2 any](arr []T1, reduce func(reduced T2, elem T1) T2) T2 {
 	return result
 }
 
+// Reduce like ReduceAs except the result type is the same as the array type.
 func Reduce[T any](arr []T, reduce func(reduced, elem T) T) T {
 	return ReduceAs(arr, reduce)
+}
+
+// All will check if all element of 'arr' respect the condition 'check'
+func All[T any](arr []T, check func(elem T) bool) bool {
+	for _, value := range arr {
+		if !check(value) {
+			return false
+		}
+	}
+	return true
 }
